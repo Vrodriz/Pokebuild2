@@ -28,9 +28,9 @@ const App: React.FC = () => {
 
   const filteredList = searchTerm
     ? pokemonList.filter((p) =>
-        p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        p.id.toString().includes(searchTerm)
-      )
+      p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      p.id.toString().includes(searchTerm)
+    )
     : pokemonList;
 
   const addToTeam = (pokemon: Pokemon) => {
@@ -50,12 +50,21 @@ const App: React.FC = () => {
     }
   };
 
+  const removeFromTeam = (index: number) => {
+    const newTeam = [...team];
+    if (newTeam[index]) {
+      toast.info(`${newTeam[index]?.name} foi removido.`);
+      newTeam[index] = null;
+      setTeam(newTeam);
+    }
+  };
+
   return (
     <Container>
       <TeamSection>
         <h2>Meu Time</h2>
         {team.map((pokemon, index) => (
-          <div key={index}>
+          <div key={index} onClick={() => removeFromTeam(index)}>
             {pokemon ? (
               <>
                 <img src={pokemon.sprites.front_default} alt={pokemon.name} />
@@ -66,6 +75,7 @@ const App: React.FC = () => {
             )}
           </div>
         ))}
+
       </TeamSection>
 
       <PokemonSection>
