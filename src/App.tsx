@@ -5,9 +5,8 @@ import { toast } from 'sonner';
 import { Container, TeamSection, PokemonSection } from './components/StyledComponents';
 
 const App: React.FC = () => {
-  const [team, setTeam] = useState<(Pokemon | null)[]>([null, null, null, null, null, null]);
+  const [team, setTeam] = useState<(Pokemon | null)[]>(Array(6).fill(null));
   const [pokemonList, setPokemonList] = useState<Pokemon[]>([]);
-  const [filteredList, setFilteredList] = useState<Pokemon[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(true);
 
@@ -17,7 +16,6 @@ const App: React.FC = () => {
         setLoading(true);
         const pokemon = await fetchPokemonList();
         setPokemonList(pokemon);
-        setFilteredList(pokemon);
       } catch (error) {
         toast.error('Erro ao carregar Pokémon.');
       } finally {
@@ -28,20 +26,19 @@ const App: React.FC = () => {
     loadPokemon();
   }, []);
 
-  useEffect(() => {
-    if (searchTerm) {
-      setFilteredList(
-        pokemonList.filter((p) =>
-          p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          p.id.toString().includes(searchTerm)
-        )
-      );
-    } else {
-      setFilteredList(pokemonList);
-    }
-  }, [searchTerm, pokemonList]);
+  const filteredList = searchTerm
+    ? pokemonList.filter((p) =>
+        p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        p.id.toString().includes(searchTerm)
+      )
+    : pokemonList;
 
   const addToTeam = (pokemon: Pokemon) => {
+    if (team.includes(pokemon)) {
+      toast.error(`${pokemon.name} já está no time!`);
+      return;
+    }
+
     const emptySlot = team.findIndex((p) => p === null);
     if (emptySlot !== -1) {
       const newTeam = [...team];
@@ -52,12 +49,25 @@ const App: React.FC = () => {
       toast.error('Time completo!');
     }
   };
-  
+
   return (
     <Container>
       <TeamSection>
         <h2>Meu Time</h2>
+        {team.map((pokemon, index) => (
+          <div key={index}>
+            {pokemon ? (
+              <>
+                <img src={pokemon.sprites.front_default} alt={pokemon.name} />
+                <p>{pokemon.name}</p>
+              </>
+            ) : (
+              <p>Vazio</p>
+            )}
+          </div>
+        ))}
       </TeamSection>
+
       <PokemonSection>
         <h2>Pokémon Disponíveis</h2>
         <input
@@ -66,17 +76,18 @@ const App: React.FC = () => {
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
-                {loading ? (
+        {loading ? (
           <p>Carregando...</p>
-          ) : (
-            filteredList.map((pokemon) => (
-              <div key={pokemon.id} onClick={() => addToTeam(pokemon)}>
-                <img src={pokemon.sprites.front_default} alt={pokemon.name} />
-                <p>{pokemon.name}</p>
-              </div>
-            ))
-          )}
-
+        ) : filteredList.length > 0 ? (
+          filteredList.map((pokemon) => (
+            <div key={pokemon.id} onClick={() => addToTeam(pokemon)}>
+              <img src={pokemon.sprites.front_default} alt={pokemon.name} />
+              <p>{pokemon.name}</p>
+            </div>
+          ))
+        ) : (
+          <p>Nenhum Pokémon encontrado.</p>
+        )}
       </PokemonSection>
     </Container>
   );
