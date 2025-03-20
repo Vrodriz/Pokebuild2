@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { fetchPokemonList } from './utils/PokemonCard';
 import { Pokemon } from './types/Pokemon';
 import { toast } from 'sonner';
-import { Container, TeamSection, PokemonSection } from './components/StyledComponents';
+import { Container, TeamSection, PokemonSection } from './components/Styles';
 
 const App: React.FC = () => {
   const [team, setTeam] = useState<(Pokemon | null)[]>(Array(6).fill(null));
