@@ -59,6 +59,15 @@ const App: React.FC = () => {
     }
   };
 
+  const randomizeTeam = () => {  
+    if (pokemonList.length > 0) { 
+      const shuffled = [...pokemonList].sort(() => 0.5 - Math.random());
+      const randomTeam = shuffled.slice(0, 6);
+      setTeam(randomTeam);
+      toast.success('Time aleatório gerado!');
+    }
+  }
+
   return (
     <Container>
       <TeamSection>
@@ -86,6 +95,7 @@ const App: React.FC = () => {
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
+        <button onClick={randomizeTeam}>Gerar time aleatório</button>
         {loading ? (
           <p>Carregando...</p>
         ) : filteredList.length > 0 ? (
