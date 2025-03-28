@@ -1,14 +1,35 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { Pokemon } from "./types/Pokemon";
 import { toast } from "sonner";
-import { Container, TeamSection, PokemonSection, PokemonCard, PokemonGrid, PokemonTypes } from "./components/Styles";
-import usePokemonQuery from "./hooks/usePokemonQuery";
+import { Container, TeamSection, PokemonSection, PokemonCard, PokemonGrid, PokemonTypes, theme } from "./components/Styles";
+import usePokemonQuery from "./hooks/usePokemonQuery";// Importa o tema corretamente
+import { ThemeProvider } from "styled-components";
+ // Se houver estilos globais
 
 const App: React.FC = () => {
   const [team, setTeam] = useState<(Pokemon | null)[]>(Array(6).fill(null));
   const [searchTerm, setSearchTerm] = useState("");
 
   const { data: pokemonList = [], isLoading, isError } = usePokemonQuery();
+
+  const addToTeam = useCallback((pokemon: Pokemon) => {
+    if (team.some((p) => p?.id === pokemon.id)) {
+      toast.error(`${pokemon.name} já está no time!`);
+      return;
+    }
+
+    const emptySlot = team.findIndex((p) => p === null);
+    if (emptySlot !== -1) {
+      setTeam((prevTeam) => {
+        const newTeam = [...prevTeam];
+        newTeam[emptySlot] = pokemon;
+        return newTeam;
+      });
+      toast.success(`${pokemon.name} foi adicionado ao time!`);
+    } else {
+      toast.error("Time completo!");
+    }
+  }, [team]);
 
   if (isLoading) return <p>Carregando...</p>;
   if (isError) return <p>Erro ao carregar Pokémon.</p>;
@@ -22,23 +43,7 @@ const App: React.FC = () => {
     )
     : pokemonList;
 
-  // Função para adicionar um Pokémon ao time
-  const addToTeam = (pokemon: Pokemon) => {
-    if (team.some((p) => p?.id === pokemon.id)) {
-      toast.error(`${pokemon.name} já está no time!`);
-      return;
-    }
 
-    const emptySlot = team.findIndex((p) => p === null);
-    if (emptySlot !== -1) {
-      const newTeam = [...team];
-      newTeam[emptySlot] = pokemon;
-      setTeam(newTeam);
-      toast.success(`${pokemon.name} foi adicionado ao time!`);
-    } else {
-      toast.error("Time completo!");
-    }
-  };
 
   // Função para remover um Pokémon do time ao clicar nele
   const removeFromTeam = (index: number) => {
@@ -88,6 +93,7 @@ const App: React.FC = () => {
 
   return (
     <Container>
+      <ThemeProvider theme={theme}>
       {/* Seção do time do usuário */}
       <TeamSection>
         <h2>Meu Time</h2>
@@ -146,6 +152,7 @@ const App: React.FC = () => {
           )}
         </PokemonGrid>
       </PokemonSection>
+      </ThemeProvider>
     </Container>
   );
 };

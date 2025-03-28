@@ -1,7 +1,61 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
+
+
+const fadeInUp = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
+
+// 🔹 Cartão de Pokémon com animação
+export const PokemonCard = styled.div`
+  background: ${({ theme }) => theme.colors.gray};
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px ${({ theme }) => theme.colors.shadow};
+  text-align: center;
+  cursor: pointer;
+  transition: ${({ theme }) => theme.transition};
+  border: 2px solid ${({ theme }) => theme.colors.border};
+  backdrop-filter: blur(10px);
+
+  // Aplicando a animação na entrada do componente
+  animation: ${fadeInUp} 0.5s ease-in-out;
+
+  &:hover {
+    transform: scale(1.05);
+    border-color: ${({ theme }) => theme.colors.textWhite};
+    box-shadow: 0 4px 15px ${({ theme }) => theme.colors.textWhite};
+  }
+
+  img {
+    width: 100px;
+    height: 100px;
+    filter: drop-shadow(0px 0px 10px rgba(255, 255, 255, 0.5));
+    transition: transform 0.3s ease-in-out;
+
+    &:hover {
+      transform: rotate(5deg);
+    }
+  }
+
+  p {
+    font-weight: bold;
+    font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+    text-transform: capitalize;
+    color: ${({ theme }) => theme.colors.text};
+    margin-top: 8px;
+  }
+`;
+
 
 // 🔹 Definição de um sistema de temas
-const theme = {
+export const theme = {
   colors: {
     primary: "#16213e",
     secondary: "#0f3460",
@@ -34,7 +88,7 @@ const SectionBase = styled.div`
   flex: 1;
   background: ${theme.colors.accent};
   border-radius: ${theme.borderRadius};
-  padding: 20px;
+  padding: 30px;
   text-align: center;
   backdrop-filter: blur(10px);
   box-shadow: 0 4px 10px ${theme.colors.shadow};
@@ -53,19 +107,19 @@ export const PokemonSection = styled(SectionBase)`
   flex: 2;
 
   input {
-    width: 80%;
+    width: 60%;
     padding: 10px;
     margin-top: 12px;
     border-radius: 8px;
     font-size: 1rem;
     outline: none;
-    background: ${theme.colors.border};
-    color: ${theme.colors.textWhite};
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: white;
+    color: black;
+    border: 2px solid rgb(0, 0, 0);
     transition: ${theme.transition};
 
     &::placeholder {
-      color: ${theme.colors.textWhite};
+      color: black;
     }
 
     &:focus {
@@ -77,7 +131,7 @@ export const PokemonSection = styled(SectionBase)`
     background: ${theme.colors.border};
     border: none;
     padding: 12px 18px;
-    margin-top: 12px;
+    margin: 12px;
     border-radius: 8px;
     font-weight: bold;
     color: ${theme.colors.textWhite};
@@ -94,43 +148,16 @@ export const PokemonSection = styled(SectionBase)`
 // 🔹 Grid de Pokémons
 export const PokemonGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: 15px;
-  justify-content: center;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); 
+  gap: 10px;
+  max-height: 650px; 
+  overflow-y: auto; 
+  padding: 10px;
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: ${({ theme }) => theme.borderRadius};
+  background: ${({ theme }) => theme.colors.accent};
 `;
 
-// 🔹 Cartão de Pokémon
-export const PokemonCard = styled.div`
-  background: ${theme.colors.gray};
-  padding: 15px;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px ${theme.colors.shadow};
-  text-align: center;
-  cursor: pointer;
-  transition: ${theme.transition};
-  border: 2px solid ${theme.colors.border};
-  backdrop-filter: blur(10px);
-
-  &:hover {
-    transform: scale(0.95);
-    border-color: ${theme.colors.gray};
-    box-shadow: 0 4px 15px ${theme.colors.gray};
-  }
-
-  img {
-    width: 100px;
-    height: 100px;
-    filter: drop-shadow(0px 0px 10px rgba(255, 255, 255, 0.5));
-  }
-
-  p {
-    font-weight: bold;
-    font-size: clamp(0.9rem, 1.5vw, 1.1rem);
-    text-transform: capitalize;
-    color: ${theme.colors.text};
-    margin-top: 8px;
-  }
-`;
 
 // 🔹 Tipos de Pokémon
 export const PokemonTypes = styled.div`
