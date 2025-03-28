@@ -1,10 +1,26 @@
 import styled from "styled-components";
 
+// 🔹 Definição de um sistema de temas
+const theme = {
+  colors: {
+    primary: "#16213e",
+    secondary: "#0f3460",
+    accent: "rgba(255, 255, 255, 0.1)",
+    text: "#000",
+    textWhite: "#fff",
+    border: "#000",
+    shadow: "rgba(0, 0, 0, 0.3)",
+    gray: "gray",
+  },
+  borderRadius: "16px",
+  transition: "0.3s ease-in-out",
+};
 
+// 🔹 Container principal
 export const Container = styled.div`
   display: flex;
   min-height: 100vh;
-  background: radial-gradient(circle at top,rgb(128, 128, 136), #16213e, #0f3460);
+  background: radial-gradient(circle at top, rgb(128, 128, 136), ${theme.colors.primary}, ${theme.colors.secondary});
   padding: 20px;
   gap: 20px;
 
@@ -13,67 +29,69 @@ export const Container = styled.div`
   }
 `;
 
-
-export const TeamSection = styled.div`
+// 🔹 Estilização base das seções
+const SectionBase = styled.div`
   flex: 1;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 16px;
+  background: ${theme.colors.accent};
+  border-radius: ${theme.borderRadius};
   padding: 20px;
   text-align: center;
   backdrop-filter: blur(10px);
+  box-shadow: 0 4px 10px ${theme.colors.shadow};
 
   h2 {
     font-family: "Orbitron", sans-serif;
-    color: black;
+    color: ${theme.colors.text};
+    margin-bottom: 15px;
+    font-size: clamp(1.2rem, 2vw, 1.5rem);
   }
 `;
 
-
-export const PokemonSection = styled.div`
+// 🔹 Seções específicas herdando estilos base
+export const TeamSection = styled(SectionBase)``;
+export const PokemonSection = styled(SectionBase)`
   flex: 2;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 16px;
-  padding: 20px;
-  text-align: center;
-  backdrop-filter: blur(10px);
-
-  h2 {
-    font-family: "Orbitron", sans-serif;
-    color: black;
-  }
 
   input {
     width: 80%;
-    padding: 8px;
-    margin-top: 10px;
+    padding: 10px;
+    margin-top: 12px;
     border-radius: 8px;
-    font-size: 16px;
+    font-size: 1rem;
     outline: none;
-    background: black;
-    color: white;
+    background: ${theme.colors.border};
+    color: ${theme.colors.textWhite};
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: ${theme.transition};
 
     &::placeholder {
-      color: white;
+      color: ${theme.colors.textWhite};
+    }
+
+    &:focus {
+      border-color: ${theme.colors.textWhite};
     }
   }
 
   button {
-    background: black;
+    background: ${theme.colors.border};
     border: none;
     padding: 12px 18px;
-    margin-top: 10px;
+    margin-top: 12px;
     border-radius: 8px;
     font-weight: bold;
-    color: white;
+    color: ${theme.colors.textWhite};
     cursor: pointer;
+    transition: transform 0.2s, background 0.3s;
 
     &:hover {
       transform: scale(1.05);
+      background: ${theme.colors.gray};
     }
   }
 `;
 
-
+// 🔹 Grid de Pokémons
 export const PokemonGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
@@ -81,22 +99,22 @@ export const PokemonGrid = styled.div`
   justify-content: center;
 `;
 
+// 🔹 Cartão de Pokémon
 export const PokemonCard = styled.div`
-  background: gray;
-  margin-top: 5px;
+  background: ${theme.colors.gray};
   padding: 15px;
   border-radius: 12px;
-  box-shadow: 0 4px 10px black;
+  box-shadow: 0 4px 10px ${theme.colors.shadow};
   text-align: center;
   cursor: pointer;
-  transition: 0.3s;
-  border: 2px solid black;
+  transition: ${theme.transition};
+  border: 2px solid ${theme.colors.border};
   backdrop-filter: blur(10px);
 
   &:hover {
-    transform: scale(0.9);
-    border-color: gray;
-    box-shadow: 0 4px 15px gray;
+    transform: scale(0.95);
+    border-color: ${theme.colors.gray};
+    box-shadow: 0 4px 15px ${theme.colors.gray};
   }
 
   img {
@@ -107,11 +125,14 @@ export const PokemonCard = styled.div`
 
   p {
     font-weight: bold;
-    font-size: 16px;
+    font-size: clamp(0.9rem, 1.5vw, 1.1rem);
     text-transform: capitalize;
-    color: black;
+    color: ${theme.colors.text};
+    margin-top: 8px;
   }
 `;
+
+// 🔹 Tipos de Pokémon
 export const PokemonTypes = styled.div`
   display: flex;
   justify-content: center;
@@ -124,7 +145,7 @@ export const PokemonTypes = styled.div`
     font-size: 12px;
     font-weight: bold;
     text-transform: capitalize;
-    color: white;
+    color: ${theme.colors.textWhite};
     border: 1px solid rgba(255, 255, 255, 0.3);
   }
 `;
