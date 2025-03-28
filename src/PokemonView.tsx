@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Pokemon } from "./types/Pokemon";
 import { toast } from "sonner";
 import { Container, TeamSection, PokemonSection, PokemonCard, PokemonGrid, PokemonTypes } from "./components/Styles";
-import usePokemonQuery from "./hooks/usePokemonQuery"; 
+import usePokemonQuery from "./hooks/usePokemonQuery";
 
 const App: React.FC = () => {
   const [team, setTeam] = useState<(Pokemon | null)[]>(Array(6).fill(null));
@@ -16,10 +16,10 @@ const App: React.FC = () => {
   // Filtra a lista de Pokémon de acordo com o termo de busca (nome ou ID)
   const filteredList = searchTerm
     ? pokemonList.filter(
-        (p) =>
-          p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          p.id.toString().includes(searchTerm)
-      )
+      (p) =>
+        p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        p.id.toString().includes(searchTerm)
+    )
     : pokemonList;
 
   // Função para adicionar um Pokémon ao time
@@ -58,6 +58,12 @@ const App: React.FC = () => {
     toast.success("Time aleatório gerado!");
   };
 
+  const clearTeam = () => {
+    setTeam(Array(6).fill(null));
+    toast.info("Todos os Pokémon foram removidos do time.");
+  };
+
+
   // Mapeia os tipos de Pokémon para cores específicas para estilização
   const typeColors: { [key: string]: string } = {
     fire: "#FF5733",
@@ -85,6 +91,9 @@ const App: React.FC = () => {
       {/* Seção do time do usuário */}
       <TeamSection>
         <h2>Meu Time</h2>
+        <button onClick={clearTeam} style={{ marginBottom: "10px" }}>
+          Remover todos
+        </button>
         <PokemonGrid>
           {team.map((pokemon, index) => (
             <div key={index} onClick={() => removeFromTeam(index)}>
@@ -100,6 +109,7 @@ const App: React.FC = () => {
           ))}
         </PokemonGrid>
       </TeamSection>
+
 
       {/* Seção de Pokémon disponíveis para adicionar ao time */}
       <PokemonSection>
