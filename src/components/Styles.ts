@@ -102,7 +102,7 @@ const SectionBase = styled.div`
 `;
 
 // 🔹 Seções específicas herdando estilos base
-export const TeamSection = styled(SectionBase)``;
+
 export const PokemonSection = styled(SectionBase)`
   flex: 2;
 
@@ -145,6 +145,30 @@ export const PokemonSection = styled(SectionBase)`
   }
 `;
 
+export const TeamSection = styled(SectionBase)`
+  background: linear-gradient(135deg, #e63946, #b71c1c); // Fundo vermelho Pokédex
+  border: 4px solid black;
+  font-family: verdana;
+  padding: 20px;
+  border-radius: 16px;
+  position: relative;
+  text-align: center;
+  box-shadow: inset 0px 0px 8px rgba(0, 0, 0, 0.4);
+
+  &::before {
+    content: "";
+    width: 20px;
+    height: 20px;
+    background: white;
+    border-radius: 50%;
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.8);
+  }
+`;
+
+
 // 🔹 Grid de Pokémons
 export const PokemonGrid = styled.div`
   display: grid;
@@ -176,3 +200,59 @@ export const PokemonTypes = styled.div`
     border: 1px solid rgba(255, 255, 255, 0.3);
   }
 `;
+
+export const TeamGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 12px;
+  justify-content: center;
+  padding: 10px;
+  max-width: 400px;
+  margin: 0 auto;
+
+  @media (max-width: 600px) {
+    grid-template-columns: repeat(2, 1fr); // 2 colunas em telas pequenas
+  }
+`;
+
+export const PokemonTeamSlot = styled.div`
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid ${({ theme }) => theme.colors.border};
+  border-radius: 10px;
+  padding: 10px;
+  text-align: center;
+  color: ${({ theme }) => theme.colors.textWhite};
+  min-width: 120px;
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease-in-out;
+
+  &:hover {
+    transform: scale(1.05);
+    border-color: ${({ theme }) => theme.colors.textWhite};
+  }
+
+  img {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 5px;
+  }
+
+  p {
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: capitalize;
+  }
+
+  .empty-slot {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.5);
+  }
+`;
+
+
+

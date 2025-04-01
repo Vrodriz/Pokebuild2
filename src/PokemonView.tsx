@@ -1,10 +1,10 @@
 import React, { useCallback, useState } from "react";
 import { Pokemon } from "./types/Pokemon";
 import { toast } from "sonner";
-import { Container, TeamSection, PokemonSection, PokemonCard, PokemonGrid, PokemonTypes, theme } from "./components/Styles";
-import usePokemonQuery from "./hooks/usePokemonQuery";// Importa o tema corretamente
+import { Container, TeamSection, PokemonSection, PokemonCard, PokemonGrid, PokemonTypes, theme, TeamGrid, PokemonTeamSlot } from "./components/Styles";
+import usePokemonQuery from "./hooks/usePokemonQuery";
 import { ThemeProvider } from "styled-components";
- // Se houver estilos globais
+
 
 const App: React.FC = () => {
   const [team, setTeam] = useState<(Pokemon | null)[]>(Array(6).fill(null));
@@ -94,64 +94,66 @@ const App: React.FC = () => {
   return (
     <Container>
       <ThemeProvider theme={theme}>
-      {/* Seção do time do usuário */}
-      <TeamSection>
-        <h2>Meu Time</h2>
-        <button onClick={clearTeam} style={{ marginBottom: "10px" }}>
-          Remover todos
-        </button>
-        <PokemonGrid>
-          {team.map((pokemon, index) => (
-            <div key={index} onClick={() => removeFromTeam(index)}>
-              {pokemon ? (
-                <>
-                  <img src={pokemon.sprites?.front_default} alt={pokemon.name} />
+        {/* Seção do time do usuário */}
+        <TeamSection>
+          <h2>Meu Time</h2>
+          <TeamGrid>
+            {team.map((pokemon, index) => (
+              <PokemonTeamSlot key={index} onClick={() => removeFromTeam(index)}>
+                {pokemon ? (
+                  <>
+                    <img src={pokemon.sprites?.front_default} alt={pokemon.name} />
+                    <p>{pokemon.name}</p>
+
+                    {pokemon.types.map((item, index) => (
+                      <PokemonTypes>{item.type.name}</PokemonTypes>
+                    ))}
+                  </>
+                ) : (
+                  <div className="empty-slot">Slot Vazio</div>
+                )}
+              </PokemonTeamSlot>
+            ))}
+          </TeamGrid>
+        </TeamSection>
+
+
+
+        {/* Seção de Pokémon disponíveis para adicionar ao time */}
+        <PokemonSection>
+          <h2>Pokémon Disponíveis</h2>
+
+          {/* Campo de busca para filtrar Pokémon */}
+          <input
+            type="text"
+            placeholder="Buscar Pokémon..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <button onClick={randomizeTeam}>Gerar time aleatório</button>
+
+          {/* Grade de Pokémon disponíveis */}
+          <PokemonGrid>
+            {filteredList.length > 0 ? (
+              filteredList.map((pokemon: Pokemon) => (
+                <PokemonCard key={pokemon.id} onClick={() => addToTeam(pokemon)}>
+                  <img src={pokemon.sprites?.other["official-artwork"]?.front_default} alt={pokemon.name} />
                   <p>{pokemon.name}</p>
-                </>
-              ) : (
-                <div className="empty-slot">Vazio</div>
-              )}
-            </div>
-          ))}
-        </PokemonGrid>
-      </TeamSection>
-
-
-      {/* Seção de Pokémon disponíveis para adicionar ao time */}
-      <PokemonSection>
-        <h2>Pokémon Disponíveis</h2>
-
-        {/* Campo de busca para filtrar Pokémon */}
-        <input
-          type="text"
-          placeholder="Buscar Pokémon..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-        <button onClick={randomizeTeam}>Gerar time aleatório</button>
-
-        {/* Grade de Pokémon disponíveis */}
-        <PokemonGrid>
-          {filteredList.length > 0 ? (
-            filteredList.map((pokemon: Pokemon) => (
-              <PokemonCard key={pokemon.id} onClick={() => addToTeam(pokemon)}>
-                <img src={pokemon.sprites?.other["official-artwork"]?.front_default} alt={pokemon.name} />
-                <p>{pokemon.name}</p>
-                <PokemonTypes>
-                  {/* Exibe os tipos do Pokémon com cores associadas */}
-                  {pokemon.types?.map((type, index) => (
-                    <span key={index} style={{ backgroundColor: typeColors[type.type.name] || "gray" }}>
-                      {type.type.name}
-                    </span>
-                  ))}
-                </PokemonTypes>
-              </PokemonCard>
-            ))
-          ) : (
-            <p>Nenhum Pokémon encontrado.</p>
-          )}
-        </PokemonGrid>
-      </PokemonSection>
+                  <PokemonTypes>
+                    {/* Exibe os tipos do Pokémon com cores associadas */}
+                    {pokemon.types?.map((type, index) => (
+                      <span key={index} style={{ backgroundColor: typeColors[type.type.name] || "gray" }}>
+                        {type.type.name}
+                      </span>
+                    ))}
+                  </PokemonTypes>
+                </PokemonCard>
+              ))
+            ) : (
+              <p>Nenhum Pokémon encontrado.</p>
+            )}
+          </PokemonGrid>
+        </PokemonSection>
       </ThemeProvider>
     </Container>
   );
