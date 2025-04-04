@@ -1,7 +1,13 @@
 import { Pokemon } from "../types/Pokemon";
 import { PokemonTeamSlot, PokemonTypes, TeamGrid, TeamSection } from "./Styles";
 
-const Team: React.FC<{ team: (Pokemon | null)[], removeFromTeam: (index: number) => void }> = ({ team, removeFromTeam }) => (
+
+
+const Team: React.FC<{
+  team: (Pokemon | null)[];
+  removeFromTeam: (index: number) => void;
+}> = ({ team, removeFromTeam }) => 
+ (
     <TeamSection>
       <h2>Meu Time</h2>
       <TeamGrid>

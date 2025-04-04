@@ -36,12 +36,12 @@ const usePokemonTeam = () => {
   }, []);
 
   const randomizeTeam = useCallback((pokemonList: Pokemon[]) => {
-    setTeam((prevTeam) => {
-      const shuffled = [...pokemonList].sort(() => 0.5 - Math.random());
-      return prevTeam.map((p) => (p === null ? shuffled.pop() ?? p : p));
-    });
+    const shuffled = [...pokemonList].sort(() => 0.5 - Math.random());
+    const randomTeam = shuffled.slice(0, 6);
+    setTeam(randomTeam);
     toast.success("Time aleatório gerado!");
   }, []);
+  
 
   const clearTeam = useCallback(() => {
     setTeam(Array(6).fill(null));
